@@ -374,7 +374,7 @@ if(pil.equals("-Pilih-")) {
     
         txtNik.requestFocus();
         txtId.setEnabled(true);
-        autoNomer(tabModel, "I", 4, txtId);
+        autoNomer(tabModel, "", 4, txtId);
        txtNik.setEnabled(true);
        txtNama.setEnabled(true);
        txtAlamat.setEnabled(true);
@@ -424,9 +424,9 @@ if(pil.equals("-Pilih-")) {
         txtRW.setText("");
         txtAgama.setText("");
         txtKewarganegaraan.setText("");
-        autoNomer(tabModel, "I", 4, txtId);
+        autoNomer(tabModel, "", 4, txtId);
         txtNik.requestFocus();
-        
+        btnSimpan.setEnabled(false);
     }//GEN-LAST:event_btnRefreshActionPerformed
 
     private void btnSimpanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSimpanActionPerformed
@@ -438,7 +438,8 @@ if(pil.equals("-Pilih-")) {
  JOptionPane.showMessageDialog(null, "Simpan Berhasil");
      }catch (Exception e) {
  e.printStackTrace();
-    }                                                       
+    }   
+       btnBatal.setEnabled(false);
     }//GEN-LAST:event_btnSimpanActionPerformed
 
     private void btnBatalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBatalActionPerformed
@@ -446,6 +447,7 @@ if(pil.equals("-Pilih-")) {
        btnSimpan.setEnabled(false);
        btnRefresh.setEnabled(false);
        btnBatal.setEnabled(false);
+       btnTambah.setEnabled(true);
        txtId.setEnabled(false);
        txtNik.setEnabled(false);
        txtNama.setEnabled(false);
