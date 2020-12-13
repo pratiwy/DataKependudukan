@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumn;
 import javax.swing.DefaultComboBoxModel;
 
 public class CRUDgui extends javax.swing.JFrame {
@@ -18,6 +19,7 @@ public DefaultTableModel tabModel;
        setVisible(true);
        judul();
        tampil(""); 
+       lebarkolom();
        btnOK.setEnabled(false);
        btnSimpan.setEnabled(false);
        btnRefresh.setEnabled(false);
@@ -63,7 +65,28 @@ public void tampil(String where) {
  e.printStackTrace();
  }
 }
-
+public void lebarkolom(){
+    TableColumn column;
+    tabel.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_OFF);
+    column = tabel.getColumnModel().getColumn(0);
+    column.setPreferredWidth(50);
+     column = tabel.getColumnModel().getColumn(1);
+    column.setPreferredWidth(150);
+     column = tabel.getColumnModel().getColumn(2);
+    column.setPreferredWidth(150);
+     column = tabel.getColumnModel().getColumn(3);
+    column.setPreferredWidth(300);
+     column = tabel.getColumnModel().getColumn(4);
+    column.setPreferredWidth(100);
+     column = tabel.getColumnModel().getColumn(5);
+    column.setPreferredWidth(50);
+     column = tabel.getColumnModel().getColumn(6);
+    column.setPreferredWidth(50);
+     column = tabel.getColumnModel().getColumn(7);
+    column.setPreferredWidth(90);
+     column = tabel.getColumnModel().getColumn(8);
+    column.setPreferredWidth(100);
+}
  public void autoNomer(DefaultTableModel tabModel,String strAwal,Integer pnj,javax.swing.JTextField teks){
         String s,s1;
         Integer j;
@@ -311,13 +334,14 @@ public void tampil(String where) {
 
         tabel.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null}
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "Title 1", "Title 2", "Title 3", "Title 4", "Title 5", "Title 6", "Title 7", "Title 8", "Title 9"
             }
         ));
         jScrollPane1.setViewportView(tabel);
@@ -356,7 +380,8 @@ public void tampil(String where) {
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 194, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
-        pack();
+        setSize(new java.awt.Dimension(660, 520));
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void cmbKelaminActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbKelaminActionPerformed
