@@ -7,8 +7,8 @@ import java.io.InputStreamReader;
 
 public class DataPenduduk {
     
-     public static void main(String[] args) throws IOException {
-     new CRUDgui(); 
+    public static void main(String[] args) throws IOException {
+        new CRUDgui();
     }
     
 }
