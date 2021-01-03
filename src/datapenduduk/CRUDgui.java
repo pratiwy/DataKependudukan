@@ -9,6 +9,7 @@ import javax.swing.DefaultComboBoxModel;
 
 public class CRUDgui extends javax.swing.JFrame {
 public Statement st;
+boolean edit;
 public ResultSet rs; 
 String sId; 
 public DefaultTableModel tabModel;
@@ -20,6 +21,7 @@ public DefaultTableModel tabModel;
        judul();
        tampil(""); 
        lebarkolom();
+       refresh();
        btnOK.setEnabled(false);
        btnSimpan.setEnabled(false);
        btnRefresh.setEnabled(false);
@@ -40,6 +42,25 @@ public DefaultTableModel tabModel;
  tabModel = new DefaultTableModel(null, judul);
 tabel.setModel(tabModel);
 }
+     public void refresh(){ // membersihkan tampilan dan mengaturnya ke tampilan awal.
+txtId.setText("");
+txtNik.setText("");
+txtNama.setText("");
+txtAlamat.setText("");
+txtKelamin.setText("");
+txtRt.setText("");
+txtRW.setText("");
+txtAgama.setText("");
+txtKewarganegaraan.setText("");
+btnOK.setEnabled(true);
+btnSimpan.setEnabled(false);
+btnEdit.setEnabled(false);
+btnHapus.setEnabled(false);
+btnBatal.setEnabled(true);
+btnSimpan.setText("Simpan");
+edit=false; 
+}
+
 public void tampil(String where) { 
  try {
  st = cn.createStatement();
@@ -109,6 +130,8 @@ public void lebarkolom(){
         btnRefresh = new javax.swing.JButton();
         btnKeluar = new javax.swing.JButton();
         btnBatal = new javax.swing.JButton();
+        btnEdit = new javax.swing.JButton();
+        btnHapus = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
@@ -180,6 +203,20 @@ public void lebarkolom(){
             }
         });
 
+        btnEdit.setText("Edit");
+        btnEdit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEditActionPerformed(evt);
+            }
+        });
+
+        btnHapus.setText("Hapus");
+        btnHapus.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnHapusActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -187,6 +224,7 @@ public void lebarkolom(){
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnHapus, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
@@ -194,7 +232,8 @@ public void lebarkolom(){
                             .addComponent(btnSimpan, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(btnRefresh, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(btnKeluar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                    .addComponent(btnBatal, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(btnBatal, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnEdit, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -208,6 +247,10 @@ public void lebarkolom(){
                 .addComponent(btnRefresh)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnBatal)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnEdit)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnHapus)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(btnKeluar)
                 .addContainerGap())
@@ -288,7 +331,7 @@ public void lebarkolom(){
                                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(txtRW, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(txtKelamin, javax.swing.GroupLayout.PREFERRED_SIZE, 184, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(0, 0, Short.MAX_VALUE))))
+                                .addGap(0, 472, Short.MAX_VALUE))))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(btnOK)))
@@ -344,6 +387,11 @@ public void lebarkolom(){
                 "Title 1", "Title 2", "Title 3", "Title 4", "Title 5", "Title 6", "Title 7", "Title 8", "Title 9"
             }
         ));
+        tabel.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tabelMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(tabel);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -357,21 +405,25 @@ public void lebarkolom(){
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap())
+                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(txtId, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 65, Short.MAX_VALUE)
+                        .addGap(263, 263, 263)
                         .addComponent(jLabel1)
-                        .addGap(102, 102, 102))))
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
-                    .addComponent(txtId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(0, 23, Short.MAX_VALUE)
+                        .addComponent(txtId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                        .addGap(10, 10, 10)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -380,7 +432,7 @@ public void lebarkolom(){
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 194, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
-        setSize(new java.awt.Dimension(660, 520));
+        setSize(new java.awt.Dimension(1034, 520));
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
@@ -425,7 +477,10 @@ if(pil.equals("-Pilih-")) {
     }//GEN-LAST:event_btnKeluarActionPerformed
 
     private void btnOKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOKActionPerformed
- btnSimpan.setEnabled(true);
+  btnSimpan.setEnabled(true);
+  btnBatal.setEnabled(true);
+  btnEdit.setEnabled(false);
+  btnHapus.setEnabled(false);
   btnBatal.setEnabled(true);
         Kependudukan k = new Kependudukan();
         k.setId(txtId.getText());
@@ -457,10 +512,18 @@ if(pil.equals("-Pilih-")) {
     private void btnSimpanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSimpanActionPerformed
        try {
  st = cn.createStatement();
- st.executeUpdate("INSERT INTO data VALUES('"+txtId.getText()+"','"+txtNik.getText()+"','"+txtNama.getText()+"','"+txtAlamat.getText()+"','"+txtKelamin.getText()+"','"+txtRt.getText()+"','"+txtRW.getText()+"','"+txtAgama.getText()+"','"+txtKewarganegaraan.getText()+"')");
+ if (edit) {
+ st.executeUpdate("UPDATE data set "+"id='"+txtId.getText()+"',"+"nik='" +txtNik.getText()+"',"+"nama='" +txtNama.getText()+"',"+"alamat='" +txtAlamat.getText()+"',"+"jeniskelamin='" +txtKelamin.getText()+"',"+"rt='" +txtRt.getText()+"',"+"rw='" +txtRW.getText()+"',"+"agama='" +txtAgama.getText()+"',"+"kewarganegaraan='" +txtKewarganegaraan.getText()+"'WHERE id='"+sId+"'");
+ }else{
+ st.executeUpdate("INSERT INTO data VALUES ('"+txtId.getText()+"','"+txtNik.getText()+"','"+txtNama.getText()+"','"+txtAlamat.getText()+"','"+txtKelamin.getText()+"','"+txtRt.getText()+"','"+txtRW.getText()+"','"+txtAgama.getText()+"','"+txtKewarganegaraan.getText()+"')");
+ }
  tampil("");
-     
+ if(edit){
+  JOptionPane.showMessageDialog(null, "Update Berhasil");   
+  }else {   
  JOptionPane.showMessageDialog(null, "Simpan Berhasil");
+}
+refresh();
      }catch (Exception e) {
  e.printStackTrace();
     }   
@@ -484,6 +547,67 @@ if(pil.equals("-Pilih-")) {
        txtKewarganegaraan.setEnabled(false);
     }//GEN-LAST:event_btnBatalActionPerformed
 
+    private void btnEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditActionPerformed
+     edit=true;
+        txtId.setEnabled(true);
+       txtNik.setEnabled(true);
+       txtNama.setEnabled(true);
+       txtAlamat.setEnabled(true);
+       txtKelamin.setEnabled(true);
+       txtRt.setEnabled(true);
+       txtRW.setEnabled(true);
+       txtAgama.setEnabled(true);
+       txtKewarganegaraan.setEnabled(true);
+       btnSimpan.setText("Update");
+       btnOK.setEnabled(true);
+       btnSimpan.setEnabled(false);
+       btnEdit.setEnabled(false);
+       btnHapus.setEnabled(false);
+       btnBatal.setEnabled(true);
+    }//GEN-LAST:event_btnEditActionPerformed
+
+    private void btnHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHapusActionPerformed
+    try {
+    int jawab;
+    if ((jawab = JOptionPane.showConfirmDialog(null, "Ingin menghapus data?", "konfirmasi", JOptionPane.YES_NO_OPTION)) == 0) {   
+        st = cn.createStatement();
+    st.executeUpdate("DELETE FROM data WHERE id='"+ tabModel.getValueAt(tabel.getSelectedRow(), 0) + "'");
+    tampil("");
+    refresh();
+    }
+    }catch (Exception e) {
+    e.printStackTrace();
+    }
+    }//GEN-LAST:event_btnHapusActionPerformed
+
+    private void tabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabelMouseClicked
+    sId=(tabel.getValueAt(tabel.getSelectedRow(), 0).toString());
+    txtNik.setText(tabel.getValueAt(tabel.getSelectedRow(), 1).toString());
+    txtNama.setText(tabel.getValueAt(tabel.getSelectedRow(), 2).toString());
+    txtAlamat.setText(tabel.getValueAt(tabel.getSelectedRow(), 3).toString());
+    txtKelamin.setText(tabel.getValueAt(tabel.getSelectedRow(), 4).toString());
+    txtRt.setText(tabel.getValueAt(tabel.getSelectedRow(), 5).toString());
+    txtRW.setText(tabel.getValueAt(tabel.getSelectedRow(), 6).toString());
+    txtAgama.setText(tabel.getValueAt(tabel.getSelectedRow(), 7).toString());
+    txtKewarganegaraan.setText(tabel.getValueAt(tabel.getSelectedRow(), 8).toString());
+    
+    txtId.setText(sId);
+    txtNik.setEnabled(false);
+    txtNama.setEnabled(false);
+    txtAlamat.setEnabled(false);
+    txtKelamin.setEnabled(false);
+    txtRt.setEnabled(false);
+    txtRW.setEnabled(false);
+    txtAgama.setEnabled(false);
+    txtKewarganegaraan.setEnabled(false);
+    
+    btnOK.setEnabled(false);
+    btnSimpan.setEnabled(false);
+    btnEdit.setEnabled(true);
+    btnHapus.setEnabled(true);
+    btnBatal.setEnabled(true);
+    }//GEN-LAST:event_tabelMouseClicked
+
     
     public static void main(String args[]) {
        
@@ -496,6 +620,8 @@ if(pil.equals("-Pilih-")) {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBatal;
+    private javax.swing.JButton btnEdit;
+    private javax.swing.JButton btnHapus;
     private javax.swing.JButton btnKeluar;
     private javax.swing.JButton btnOK;
     private javax.swing.JButton btnRefresh;
